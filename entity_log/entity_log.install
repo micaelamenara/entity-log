@@ -1,0 +1,56 @@
+
+<?php
+
+function entity_log_schema() {
+  $schema['entity_log'] = array(
+    'description' => 'Entity log table.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'Log Identifier.',
+        'type' => 'serial',
+        'not null' => TRUE,
+        'size' => 'big',
+      ),
+      'uid' => array(
+        'description' => 'User Identifier.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'size' => 'big',
+      ),
+      'eid' => array(
+        'description' => 'Node Identifier.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'size' => 'big',
+      ),
+      'entity_type' => array(
+        'description' => 'The machine-readable name of this type.',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+      ),
+      'entity_bundle' => array(
+        'description' => 'The machine-readable name of this type bundle.',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+      ),
+      'date' => array(
+        'description' => 'The date of the change.',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+      ),
+      'action' => array(
+        'description' => 'The action of the log.',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+  return $schema;
+}

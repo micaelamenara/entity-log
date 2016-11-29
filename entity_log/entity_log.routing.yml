@@ -1,0 +1,7 @@
+entity_log.entity_log_form:
+ path: '/admin/config/system/entity_log'
+ defaults:
+   _form: 'Drupal\entity_log\Form\EntityLogForm'
+   _title: 'Entity log form'
+ requirements:
+   _permission: 'administer site configuration'

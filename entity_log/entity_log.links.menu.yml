@@ -1,0 +1,6 @@
+entity_log.entity_log_form:
+ title: 'Entity log'
+ parent: system.admin_config_system
+ route_name: entity_log.entity_log_form
+ weight: 10
+ description: 'Entity log configuration.'

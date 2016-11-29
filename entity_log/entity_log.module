@@ -1,0 +1,57 @@
+<?php
+
+/**
+ * @file
+ * Contains entity_log.module..
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\entity_log\entityLog;
+use Drupal\Core\Database\Database;
+use Drupal\Core\Config\Entity\ConfigEntityInterface;
+use Drupal\entity_log\EntityType;
+use Drupal\entity_log\ValidateLog;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
+use Drupal\Component\Serialization\Json;
+use Drupal\Core\Entity\EntityManagerInterface;
+
+/**
+ * Implements hook_entity_update().
+ */
+function entity_log_entity_update(EntityInterface $entity) {
+	$ValidateLog = new ValidateLog();
+	if ($ValidateLog->validate($entity)== TRUE) {
+		$logAction = new EntityType();
+		$action = $logAction->getAction($entity);
+		
+		$log = new entityLog();
+		$log->insertLog($entity, $action);
+	}
+}
+
+/**
+ * Implements hook_entity_insert().
+ *
+ * @param  Drupal\Core\Entity\EntityInterface $entity
+ */
+function entity_log_entity_insert(EntityInterface $entity) {	
+	$ValidateLog = new ValidateLog();
+	if ($ValidateLog->validate($entity)== TRUE) {
+		$log = new entityLog();
+		$log->insertLog($entity, 'CREATE');
+	}
+}
+
+/**
+ * Implements hook_entity_delete().
+ *
+ * @param  Drupal\Core\Entity\EntityInterface $entity
+ */
+function entity_log_entity_delete(EntityInterface $entity) {
+	$ValidateLog = new ValidateLog();
+	if ($ValidateLog->validate($entity)== TRUE) {
+		$log = new entityLog();
+		$log->insertLog($entity, 'DELETE');
+	}
+}

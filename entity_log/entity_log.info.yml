@@ -1,0 +1,5 @@
+name: Entity Log
+type: module
+description: Create logs
+package: Custom
+core: 8.x
