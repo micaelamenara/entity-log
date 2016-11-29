@@ -88,7 +88,7 @@ function entity_log_views_data() {
       'id' => 'standard',
     ),
     'filter' => array(
-      'id' => 'string',
+      'id' => 'entity_log_entity_type_field',
     ),
     'argument' => array(
       'id' => 'string',
