@@ -15,6 +15,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Entity\EntityManagerInterface;
+use Drupal\views\ViewExecutable;
 
 /**
  * Implements hook_entity_update().
@@ -39,7 +40,7 @@ function entity_log_entity_insert(EntityInterface $entity) {
 	$ValidateLog = new ValidateLog();
 	if ($ValidateLog->validate($entity)== TRUE) {
 		$log = new entityLog();
-		$log->insertLog($entity, 'CREATE');
+		$log->insertLog($entity, 'Create');
 	}
 }
 
@@ -52,6 +53,15 @@ function entity_log_entity_delete(EntityInterface $entity) {
 	$ValidateLog = new ValidateLog();
 	if ($ValidateLog->validate($entity)== TRUE) {
 		$log = new entityLog();
-		$log->insertLog($entity, 'DELETE');
+		$log->insertLog($entity, 'Delete');
 	}
+}
+
+/**
+ * Implements hook_views_pre_render.
+ */
+function entity_log_views_pre_render(ViewExecutable $view) {
+  if ($view->id() == "entity_log_view") {
+    $view->element['#attached']['library'][] = 'entity_log/entity-log';
+  }
 }

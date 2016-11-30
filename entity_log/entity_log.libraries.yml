@@ -1,0 +1,5 @@
+entity-log:
+  version: VERSION
+  css:
+    layout:
+      css/entity-log.module.css: {}

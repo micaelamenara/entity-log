@@ -1,0 +1,47 @@
+/**
+* @file
+*/
+
+td.views-field-action {
+  float: left;
+  border-radius: 10px;
+  padding: 7px;
+  margin: 5px;
+  min-width: 85px;
+  text-align: center;
+}
+
+.Update .views-field-action {
+  color: white;
+  background: #73AD21;
+}
+
+.Unpublished .views-field-action {
+ 	color: white;
+  background: #d04e4e;
+}
+
+.Published .views-field-action {
+ 	color: #d04e4e;
+  border: 3px solid #d04e4e;
+}
+
+.Active .views-field-action {
+ 	color: white;
+  background: #73AD21;
+}
+
+.Blocked .views-field-action {
+	color: white;
+  background: #d04e4e;
+}
+
+.Delete .views-field-action {
+  color: #d04e4e;
+  border: 3px solid #d04e4e;
+}
+
+.Create .views-field-action {
+ 	color: #73AD21;
+  border: 3px solid #73AD21;
+}

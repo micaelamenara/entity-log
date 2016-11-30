@@ -11,12 +11,12 @@ class UserEntityLog {
    * Update log action.
    */
   public function getLogAction(EntityInterface $entity) {
-    $action = 'UPDATE';
+    $action = 'Update';
     if ($entity->original->isActive() == 1 && $entity->isActive() == 0) {
-      $action = 'BLOCKED';
+      $action = 'Blocked';
     }
     if ($entity->original->isActive() == 0 && $entity->isActive() == 1) {
-      $action = 'ACTIVE';
+      $action = 'Active';
     }
 
     return $action;

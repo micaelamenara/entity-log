@@ -13,7 +13,7 @@ class EntityType {
    * Update log action.
    */
   public function getAction(EntityInterface $entity) {
-    $action = 'UPDATE';
+    $action = 'Update';
 
     if ($entity->getEntityTypeId() == 'node'){
       $logAction = new nodeEntityLog();
