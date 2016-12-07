@@ -18,7 +18,7 @@ class ValidateLog {
    */
   public function validate(EntityInterface $entity) {
     
-    if ($this->is_content($entity) && $this->is_included($entity)) {
+    if ($this->is_content($entity) && $this->is_included($entity) && $this->not_content_moderation($entity)) {
       return TRUE;
     }
     else {
@@ -41,11 +41,20 @@ class ValidateLog {
   }
 
   protected function is_content(EntityInterface $entity){
-    if (!($entity instanceof  ConfigEntityInterface)){
+    if (!($entity instanceof ConfigEntityInterface)){
       return TRUE;
     }
     else {
       return FALSE;
+    }
+  }
+
+  protected function not_content_moderation(EntityInterface $entity){
+    if ($entity->getEntityTypeId() == 'content_moderation_state'){
+      return FALSE;
+    }
+    else {
+      return TRUE;
     }
   }
 

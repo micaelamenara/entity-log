@@ -10,22 +10,22 @@ use Drupal\entity_log\UserEntityLog;
 class EntityType {
 
   /**
-   * Update log action.
+   * Update log status.
    */
-  public function getAction(EntityInterface $entity) {
-    $action = 'Update';
+  public function getStatus(EntityInterface $entity) {
+    $status = NULL;
 
     if ($entity->getEntityTypeId() == 'node'){
-      $logAction = new nodeEntityLog();
-      $action = $logAction->getLogAction($entity);
+      $logNode = new nodeEntityLog();
+      $status = $logNode->getStatus($entity);
     }
 
     if ($entity->getEntityTypeId() == 'user'){
-      $logAction = new UserEntityLog();
-      $action = $logAction->getLogAction($entity);
+      $logUser = new UserEntityLog();
+      $status = $logUser->getStatus($entity);
     }
     
-    return $action;
+    return $status;
   }
 
 }

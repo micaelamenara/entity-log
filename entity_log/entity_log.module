@@ -10,6 +10,7 @@ use Drupal\entity_log\entityLog;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\entity_log\EntityType;
+use Drupal\entity_log\CheckContentModeration;
 use Drupal\entity_log\ValidateLog;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
@@ -17,18 +18,25 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\views\ViewExecutable;
 
+
 /**
  * Implements hook_entity_update().
  */
 function entity_log_entity_update(EntityInterface $entity) {
 	$ValidateLog = new ValidateLog();
-	if ($ValidateLog->validate($entity)== TRUE) {
-		$logAction = new EntityType();
-		$action = $logAction->getAction($entity);
+	$CheckContentMod = new CheckContentModeration();
+
+	if ($ValidateLog->validate($entity) == TRUE) {
 		
+		$mod_status = $CheckContentMod->checkCM($entity);
+		if (is_null($mod_status)) {
+			$log = new EntityType();
+			$mod_status = $log->getStatus($entity);
+		}
 		$log = new entityLog();
-		$log->insertLog($entity, $action);
+		$log->insertLog($entity, 'Update', $mod_status);
 	}
+
 }
 
 /**
@@ -38,10 +46,19 @@ function entity_log_entity_update(EntityInterface $entity) {
  */
 function entity_log_entity_insert(EntityInterface $entity) {	
 	$ValidateLog = new ValidateLog();
-	if ($ValidateLog->validate($entity)== TRUE) {
+	$CheckContentMod = new CheckContentModeration();
+
+	if ($ValidateLog->validate($entity) == TRUE) {
+		
+		$mod_status = $CheckContentMod->checkCM($entity);
+		if(is_null($mod_status)) {
+			$log = new EntityType();
+			$mod_status = $log->getStatus($entity);
+		}
 		$log = new entityLog();
-		$log->insertLog($entity, 'Create');
+		$log->insertLog($entity, 'Create', $mod_status);
 	}
+
 }
 
 /**
@@ -51,10 +68,15 @@ function entity_log_entity_insert(EntityInterface $entity) {
  */
 function entity_log_entity_delete(EntityInterface $entity) {
 	$ValidateLog = new ValidateLog();
-	if ($ValidateLog->validate($entity)== TRUE) {
+	$CheckContentMod = new CheckContentModeration();
+	
+	if ($ValidateLog->validate($entity) == TRUE) {
+		$logAction = new EntityType();
+
 		$log = new entityLog();
-		$log->insertLog($entity, 'Delete');
+		$log->insertLog($entity, 'Delete', NULL);
 	}
+
 }
 
 /**
@@ -62,6 +84,6 @@ function entity_log_entity_delete(EntityInterface $entity) {
  */
 function entity_log_views_pre_render(ViewExecutable $view) {
   if ($view->id() == "entity_log_view") {
-    $view->element['#attached']['library'][] = 'entity_log/entity-log';
+	$view->element['#attached']['library'][] = 'entity_log/entity-log';
   }
 }

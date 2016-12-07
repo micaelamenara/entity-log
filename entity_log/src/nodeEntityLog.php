@@ -8,17 +8,15 @@ use Drupal\Core\Database\Database;
 class nodeEntityLog {
 
   /**
-   * Update log action.
+   * Update log status.
    */
-  public function getLogAction(EntityInterface $entity) {
-    $action = 'Update';
-    if ($entity->original->isPublished() == 1 && $entity->isPublished() == 0) {
-      $action = 'Unpublished';
+  public function getStatus(EntityInterface $entity) {
+    if ($entity->isPublished() == 0) {
+      $status = 'Unpublished';
     }
-    if ($entity->original->isPublished() == 0 && $entity->isPublished() == 1) {
-      $action = 'Published';
+    else {
+      $status = 'Published';
     }
-
-    return $action;
+    return $status;
   }
 }

@@ -10,7 +10,7 @@ class entityLog {
   /**
    * Update log.
    */
-  public function insertLog(EntityInterface $entity, $action) {
+  public function insertLog(EntityInterface $entity, $action, $status) {
     
     $uid = \Drupal::currentUser()->id();
     $conn = Database::getConnection();
@@ -18,6 +18,7 @@ class entityLog {
     $conn->insert('entity_log')->fields(
     array(
       'action' => $action,
+      'status' => $status,
       'entity_type' => $entity->getEntityTypeId(),
       'entity_bundle' => $entity->bundle(),
       'eid' => $entity->id(),

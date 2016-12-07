@@ -8,17 +8,17 @@ use Drupal\Core\Database\Database;
 class UserEntityLog {
 
   /**
-   * Update log action.
+   * Update log status.
    */
-  public function getLogAction(EntityInterface $entity) {
-    $action = 'Update';
-    if ($entity->original->isActive() == 1 && $entity->isActive() == 0) {
-      $action = 'Blocked';
+  public function getStatus(EntityInterface $entity) {
+    $status = NULL;
+    if ($entity->isActive() == 0) {
+      $status = 'Blocked';
     }
-    if ($entity->original->isActive() == 0 && $entity->isActive() == 1) {
-      $action = 'Active';
+    else {
+      $status = 'Active';
     }
 
-    return $action;
+    return $status;
   }
 }
