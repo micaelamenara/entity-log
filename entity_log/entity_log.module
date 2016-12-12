@@ -1,3 +1,4 @@
+
 <?php
 
 /**
@@ -10,8 +11,8 @@ use Drupal\entity_log\entityLog;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\entity_log\EntityType;
-use Drupal\entity_log\CheckContentModeration;
-use Drupal\entity_log\ValidateLog;
+use Drupal\entity_log\Services\CheckContentModeration;
+use Drupal\entity_log\Services\ValidateLog;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Drupal\Component\Serialization\Json;
@@ -23,15 +24,18 @@ use Drupal\views\ViewExecutable;
  * Implements hook_entity_update().
  */
 function entity_log_entity_update(EntityInterface $entity) {
-	$ValidateLog = new ValidateLog();
-	$CheckContentMod = new CheckContentModeration();
 
-	if ($ValidateLog->validate($entity) == TRUE) {
-		
+	$ValidateLog = \Drupal::service('entity_log.validate');
+  	$is_validate = $ValidateLog->validate($entity); 
+
+	if ($is_validate == TRUE) {
+
+		$CheckContentMod = \Drupal::service('entity_log.checkcontentmod');
 		$mod_status = $CheckContentMod->checkCM($entity);
+
 		if (is_null($mod_status)) {
-			$log = new EntityType();
-			$mod_status = $log->getStatus($entity);
+			$type = new EntityType();
+			$mod_status = $type->getStatus($entity);
 		}
 		$log = new entityLog();
 		$log->insertLog($entity, 'Update', $mod_status);
@@ -48,12 +52,17 @@ function entity_log_entity_insert(EntityInterface $entity) {
 	$ValidateLog = new ValidateLog();
 	$CheckContentMod = new CheckContentModeration();
 
-	if ($ValidateLog->validate($entity) == TRUE) {
-		
+	$ValidateLog = \Drupal::service('entity_log.validate');
+  	$is_validate = $ValidateLog->validate($entity); 
+
+	if ($is_validate == TRUE) {
+
+		$CheckContentMod = \Drupal::service('entity_log.checkcontentmod');
 		$mod_status = $CheckContentMod->checkCM($entity);
-		if(is_null($mod_status)) {
-			$log = new EntityType();
-			$mod_status = $log->getStatus($entity);
+
+		if (is_null($mod_status)) {
+			$type = new EntityType();
+			$mod_status = $type->getStatus($entity);
 		}
 		$log = new entityLog();
 		$log->insertLog($entity, 'Create', $mod_status);
@@ -67,12 +76,10 @@ function entity_log_entity_insert(EntityInterface $entity) {
  * @param  Drupal\Core\Entity\EntityInterface $entity
  */
 function entity_log_entity_delete(EntityInterface $entity) {
-	$ValidateLog = new ValidateLog();
-	$CheckContentMod = new CheckContentModeration();
-	
-	if ($ValidateLog->validate($entity) == TRUE) {
-		$logAction = new EntityType();
+	$ValidateLog = \Drupal::service('entity_log.validate');
+  	$is_validate = $ValidateLog->validate($entity); 
 
+	if ($is_validate == TRUE) {
 		$log = new entityLog();
 		$log->insertLog($entity, 'Delete', NULL);
 	}

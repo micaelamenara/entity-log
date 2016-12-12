@@ -1,0 +1,5 @@
+services:
+  entity_log.validate:
+    class: Drupal\entity_log\Services\ValidateLog
+  entity_log.checkcontentmod:
+    class: Drupal\entity_log\Services\CheckContentModeration
